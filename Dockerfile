@@ -42,25 +42,10 @@ RUN git clone https://github.com/yyuu/pyenv.git /root/.pyenv \
     && sudo echo 'eval "$(pyenv init -)"'               >> ~/.bashrc
 
 RUN pyenv install $PYTHON_VERSION
-
-# WORKDIR /tmp
-# RUN wget https://www.python.org/ftp/python/3.6.3/Python-3.6.3.tgz
-# RUN tar -xvf Python-3.6.3.tgz
-# RUN rm Python-3.6.3.tgz
-# WORKDIR /tmp/Python-3.6.3/
-# RUN ./configure --enable-optimizations
-# RUN make -j8
-# RUN make install
-# 
-# WORKDIR /
-
 RUN pyenv global $PYTHON_VERSION
 
 RUN pip3 install --upgrade pip
-
 RUN pip3 install --upgrade setuptools
-
-
 RUN pip3 install --ignore-installed six
 
 # install cmake v 3.10.3
