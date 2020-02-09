@@ -1,5 +1,6 @@
 #Download base ubuntu image
 FROM ubuntu:14.04
+SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update && \
     apt-get -y install software-properties-common python-software-properties && \
@@ -12,9 +13,54 @@ RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
     apt-get update
 
 # Prepare python
-RUN apt-get -y install swig3.0 python3.5 python3.5-dev python3-pip libhwloc-dev libboost-dev
+RUN apt-get update && apt-get -y install swig3.0 libhwloc-dev libboost-dev libffi-dev python3-dev python3-pip python3-tk python3-lxml python3-six
 
-RUN pip3 install --upgrade pip setuptools
+# PyEnv
+ENV PYENV_ROOT /root/.pyenv
+ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+# Configure Python not to try to write .pyc files on the import of source modules
+ENV PYTHONDONTWRITEBYTECODE true
+ENV PYTHON_VERSION 3.6.2
+
+RUN sudo apt-get update -q \
+    && sudo apt-get install -y --no-install-recommends \
+        build-essential \
+        ca-certificates \
+        curl \
+        git \
+        libbz2-dev \
+        libreadline-dev \
+        libsqlite3-dev \
+        libssl-dev \
+        zlib1g-dev
+
+# Install pyenv and default python version
+RUN git clone https://github.com/yyuu/pyenv.git /root/.pyenv \
+    && cd /root/.pyenv \
+    && git checkout `git describe --abbrev=0 --tags` \
+    && sudo echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bashrc \
+    && sudo echo 'eval "$(pyenv init -)"'               >> ~/.bashrc
+
+RUN pyenv install $PYTHON_VERSION
+
+# WORKDIR /tmp
+# RUN wget https://www.python.org/ftp/python/3.6.3/Python-3.6.3.tgz
+# RUN tar -xvf Python-3.6.3.tgz
+# RUN rm Python-3.6.3.tgz
+# WORKDIR /tmp/Python-3.6.3/
+# RUN ./configure --enable-optimizations
+# RUN make -j8
+# RUN make install
+# 
+# WORKDIR /
+
+RUN pyenv global $PYTHON_VERSION
+
+RUN pip3 install --upgrade pip
+
+RUN pip3 install --upgrade setuptools
+
+
 RUN pip3 install --ignore-installed six
 
 # install cmake v 3.10.3
