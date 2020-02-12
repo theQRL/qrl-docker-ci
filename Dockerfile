@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get -y install build-essential pkg-config git sudo wget
 
 # Prepare python
-RUN apt-get -y install swig3.0 python3 python3-dev python3-pip python3-venv libhwloc-dev libboost-dev
+RUN apt-get -y install swig3.0 python3=3.5.3* python3-dev=3.5.3* python3-pip=3.5.3* python3-venv=3.5.3* libhwloc-dev libboost-dev
 
 RUN cd /usr/local/src \
     && wget https://cmake.org/files/v3.10/cmake-3.10.3.tar.gz \
