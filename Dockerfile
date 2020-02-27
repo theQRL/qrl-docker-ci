@@ -1,4 +1,4 @@
-k#Download base ubuntu image
+#Download base ubuntu image
 FROM ubuntu:16.04
 RUN apt-get update && \
     apt-get -y install software-properties-common python-software-properties && \
