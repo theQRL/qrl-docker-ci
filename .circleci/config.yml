@@ -1,21 +1,35 @@
-version: 2
+version: 2.1
+orbs:
+  docker: circleci/docker@1.5.0
 jobs:
-  build:
-    docker:
-      - image: alpine:3.5
-    environment:
-      CURL_DATA: "\"Content-Type: application/json\" --data '{\"build\": true}'"
+  build_and_push:
+    executor: docker/docker
     steps:
-      - run: apk add --no-cache curl
-      - run: echo ${DOCKERHUB_TOKEN}
-      - run: echo ${CURL_DATA}
-      - run: "curl -X POST --header 'Content-Type: application/json' --data '{\"build\": true}' https://registry.hub.docker.com/u/qrledger/qrl-docker-ci/trigger/${DOCKERHUB_TOKEN}/"
-
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: "Build and push Docker image"
+          command: |
+            if [ "$CIRCLE_BRANCH" == "noble" ]; then
+              docker build -t qrledger/qrl-docker-ci:noble .
+              docker tag qrledger/qrl-docker-ci:noble qrledger/qrl-docker-ci:latest
+              echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+              docker push qrledger/qrl-docker-ci:noble
+              docker push qrledger/qrl-docker-ci:latest
+            else
+              docker build -t qrledger/qrl-docker-ci:$CIRCLE_BRANCH .
+              echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+              docker push qrledger/qrl-docker-ci:$CIRCLE_BRANCH
+            fi
 workflows:
   version: 2
   commit:
     jobs:
-      - build
+      - build_and_push:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
   nightly:
     triggers:
       - schedule:
@@ -24,6 +38,8 @@ workflows:
             branches:
               only:
                 - master
+                - noble
+                - xenial
+                - bionic
     jobs:
-      - build
-      
+      - build_and_push
