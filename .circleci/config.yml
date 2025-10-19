@@ -30,6 +30,7 @@ workflows:
             branches:
               ignore:
                 - gh-pages
+                - master
   nightly:
     triggers:
       - schedule:
@@ -37,7 +38,6 @@ workflows:
           filters:
             branches:
               only:
-                - master
                 - noble
                 - xenial
                 - bionic
