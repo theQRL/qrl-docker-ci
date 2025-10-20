@@ -25,3 +25,10 @@ RUN cd /usr/local/src \
     && make install \
     && cd .. \
     && rm -rf cmake*
+
+RUN groupadd -r qrl && useradd -r -g qrl -m -d /home/qrl -s /bin/bash qrl && \
+chown -R qrl:qrl /home/qrl && \
+chown -R qrl:qrl /usr/local/src
+
+USER qrl
+WORKDIR /home/qrl
