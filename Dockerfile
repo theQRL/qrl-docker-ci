@@ -13,7 +13,14 @@ RUN apt-get -y install cmake swig3.0 python3 python3-dev python3-pip python3-ven
 
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
-RUN pip3 install --upgrade pip setuptools
+
+# Upgrade pip and setuptools
+RUN pip3 install --upgrade pip setuptools>=80.9.0 && \
+    # Remove all system setuptools packages and wheels
+    apt-get -y remove python3-setuptools python3-setuptools-whl || true && \
+    rm -rf /usr/lib/python3/dist-packages/setuptools* && \
+    rm -rf /usr/lib/python3*/site-packages/setuptools* && \
+    rm -rf /usr/share/python-wheels/setuptools-*
 
 RUN groupadd -r qrl && useradd -r -g qrl -m -d /home/qrl -s /bin/bash qrl && \
     chown -R qrl:qrl /home/qrl && \
