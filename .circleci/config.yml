@@ -37,9 +37,6 @@ workflows:
           filters:
             branches:
               only:
-                - master
-                - noble
-                - xenial
                 - bionic
     jobs:
       - build_and_push
