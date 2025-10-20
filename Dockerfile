@@ -15,16 +15,9 @@ RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 RUN pip3 install --upgrade pip setuptools
 
-RUN echo "ALL ALL=NOPASSWD: ALL" >> /etc/sudoers
+RUN groupadd -r qrl && useradd -r -g qrl -m -d /home/qrl -s /bin/bash qrl && \
+    chown -R qrl:qrl /home/qrl && \
+    chown -R qrl:qrl /usr/local/src
 
-# ENV - Define environment variables
-# TODO: define any required environment variables
-
-# COPY - Copy configuration/scripts
-
-# VOLUME - link directories to host
-
-# START SCRIPT - The script is started from travis with the appropriate environment variables
-
-# EXPOSE PORTS
-# TODO: Map ports to get access from outside
+USER qrl
+WORKDIR /home/qrl
