@@ -24,7 +24,8 @@ RUN pip3 install --upgrade pip setuptools>=80.9.0 && \
 
 RUN groupadd -r qrl && useradd -r -g qrl -m -d /home/qrl -s /bin/bash qrl && \
     chown -R qrl:qrl /home/qrl && \
-    chown -R qrl:qrl /usr/local/src
+    chown -R qrl:qrl /usr/local/src && \
+    chown -R qrl:qrl /opt/venv
 
 USER qrl
 WORKDIR /home/qrl
