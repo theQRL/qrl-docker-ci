@@ -13,12 +13,12 @@ jobs:
             if [ "$CIRCLE_BRANCH" == "noble" ]; then
               docker build -t qrledger/qrl-docker-ci:noble .
               docker tag qrledger/qrl-docker-ci:noble qrledger/qrl-docker-ci:latest
-              echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+              echo "$DOCKERHUB_TOKEN" | docker login --password-stdin
               docker push qrledger/qrl-docker-ci:noble
               docker push qrledger/qrl-docker-ci:latest
             else
               docker build -t qrledger/qrl-docker-ci:$CIRCLE_BRANCH .
-              echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+              echo "$DOCKERHUB_TOKEN" | docker login --password-stdin
               docker push qrledger/qrl-docker-ci:$CIRCLE_BRANCH
             fi
 workflows:
