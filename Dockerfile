@@ -8,8 +8,8 @@ RUN apt-get update && \
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 RUN echo 'source $HOME/.cargo/env' >> $HOME/.bashrc
 
-# Get Go
-RUN curl -L https://go.dev/dl/go1.23.2.linux-amd64.tar.gz | tar -C /usr/local -xz
+# Get Go (latest secure version)
+RUN curl -L https://go.dev/dl/go1.25.3.linux-amd64.tar.gz | tar -C /usr/local -xz
 
 # Get dependencies
 RUN apt-get -y install cmake swig3.0 python3 python3-dev python3-pip python3-venv libhwloc-dev libboost-dev libffi-dev libssl-dev
