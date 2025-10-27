@@ -1,24 +1,25 @@
 #Download base ubuntu image
 FROM ubuntu:24.04
+
+# Install dependencies
 RUN apt-get update && \
     apt-get -y install ca-certificates curl && \
-    apt-get -y install build-essential pkg-config git sudo wget
-
-# Install Playwright system dependencies
-RUN apt-get install -y \
-    libnss3 \
-    libnspr4 \
-    libatk-bridge2.0-0 \
-    libdrm2 \
-    libxkbcommon0 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxrandr2 \
-    libgbm1 \
-    libxss1 \
-    libasound2t64 \
-    libgtk-3-0 \
-    libgdk-pixbuf2.0-0 \
+    apt-get -y install build-essential pkg-config git sudo wget && \
+    apt-get install -y \
+        libnss3 \
+        libnspr4 \
+        libatk-bridge2.0-0 \
+        libdrm2 \
+        libxkbcommon0 \
+        libxcomposite1 \
+        libxdamage1 \
+        libxrandr2 \
+        libgbm1 \
+        libxss1 \
+        libasound2t64 \
+        libgtk-3-0 \
+        libgdk-pixbuf2.0-0 && \
+    apt-get -y install cmake swig3.0 python3 python3-dev python3-pip python3-venv libhwloc-dev libboost-dev libffi-dev libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Get Rust
@@ -27,9 +28,6 @@ RUN echo 'source $HOME/.cargo/env' >> $HOME/.bashrc
 
 # Get Go
 RUN curl -L https://go.dev/dl/go1.25.3.linux-amd64.tar.gz | tar -C /usr/local -xz
-
-# Get dependencies
-RUN apt-get -y install cmake swig3.0 python3 python3-dev python3-pip python3-venv libhwloc-dev libboost-dev libffi-dev libssl-dev
 
 # Get Emscripten SDK
 RUN git clone https://github.com/emscripten-core/emsdk.git /usr/local/emsdk && \
