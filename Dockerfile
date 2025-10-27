@@ -4,6 +4,23 @@ RUN apt-get update && \
     apt-get -y install ca-certificates curl && \
     apt-get -y install build-essential pkg-config git sudo wget
 
+# Install Playwright system dependencies
+RUN apt-get install -y \
+    libnss3 \
+    libnspr4 \
+    libatk-bridge2.0-0 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    libgbm1 \
+    libxss1 \
+    libasound2 \
+    libgtk-3-0 \
+    libgdk-pixbuf2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Get Rust
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 RUN echo 'source $HOME/.cargo/env' >> $HOME/.bashrc
@@ -67,3 +84,7 @@ ENV PATH="$EMSDK:$EMSDK/upstream/emscripten:$EMSDK/node/22.16.0_64bit/bin:$PATH"
 RUN echo 'source /usr/local/emsdk/emsdk_env.sh' >> /home/qrl/.bashrc
 
 WORKDIR /home/qrl
+
+# Install Playwright and browsers as user qrl
+RUN npm install -g playwright@latest \
+    && npx playwright install chromium
