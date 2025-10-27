@@ -29,7 +29,7 @@ ENV PATH="/usr/local/go/bin:$PATH"
 
 # Set up Emscripten environment
 ENV EMSDK="/usr/local/emsdk"
-ENV PATH="$EMSDK:$EMSDK/upstream/emscripten:$PATH"
+ENV PATH="$EMSDK:$EMSDK/upstream/emscripten:$EMSDK/node/22.16.0_64bit/bin:$PATH"
 
 # Upgrade pip and setuptools
 RUN pip3 install --upgrade pip setuptools>=80.9.0 && \
@@ -61,7 +61,7 @@ ENV CARGO_HOME="/home/qrl/.cargo"
 ENV RUSTUP_HOME="/home/qrl/.rustup"
 # Emscripten environment for qrl user
 ENV EMSDK="/usr/local/emsdk"
-ENV PATH="$EMSDK:$EMSDK/upstream/emscripten:$PATH"
+ENV PATH="$EMSDK:$EMSDK/upstream/emscripten:$EMSDK/node/22.16.0_64bit/bin:$PATH"
 
 # Source emsdk environment in bashrc for interactive use
 RUN echo 'source /usr/local/emsdk/emsdk_env.sh' >> /home/qrl/.bashrc
