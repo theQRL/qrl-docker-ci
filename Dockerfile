@@ -16,7 +16,7 @@ RUN apt-get install -y \
     libxrandr2 \
     libgbm1 \
     libxss1 \
-    libasound2 \
+    libasound2t64 \
     libgtk-3-0 \
     libgdk-pixbuf2.0-0 \
     && rm -rf /var/lib/apt/lists/*
