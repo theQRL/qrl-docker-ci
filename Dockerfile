@@ -33,7 +33,8 @@ RUN curl -L https://go.dev/dl/go1.25.3.linux-amd64.tar.gz | tar -C /usr/local -x
 RUN git clone https://github.com/emscripten-core/emsdk.git /usr/local/emsdk && \
     cd /usr/local/emsdk && \
     ./emsdk install latest && \
-    ./emsdk activate latest
+    ./emsdk activate latest && \
+    ln -sfn "$(ls -d /usr/local/emsdk/node/*_64bit | head -1)" /usr/local/emsdk/node/current
 
 # Prepare python
 RUN python3 -m venv /opt/venv
@@ -44,10 +45,10 @@ ENV PATH="/usr/local/go/bin:$PATH"
 
 # Set up Emscripten environment
 ENV EMSDK="/usr/local/emsdk"
-ENV PATH="$EMSDK:$EMSDK/upstream/emscripten:$EMSDK/node/22.16.0_64bit/bin:$PATH"
+ENV PATH="$EMSDK:$EMSDK/upstream/emscripten:$EMSDK/node/current/bin:$PATH"
 
 # Upgrade pip and setuptools
-RUN pip3 install --upgrade pip setuptools>=80.9.0 && \
+RUN pip3 install --upgrade pip 'setuptools>=80.9.0' && \
     # Remove all system setuptools packages and wheels
     apt-get -y remove python3-setuptools python3-setuptools-whl || true && \
     rm -rf /usr/lib/python3/dist-packages/setuptools* && \
@@ -76,7 +77,7 @@ ENV CARGO_HOME="/home/qrl/.cargo"
 ENV RUSTUP_HOME="/home/qrl/.rustup"
 # Emscripten environment for qrl user
 ENV EMSDK="/usr/local/emsdk"
-ENV PATH="$EMSDK:$EMSDK/upstream/emscripten:$EMSDK/node/22.16.0_64bit/bin:$PATH"
+ENV PATH="$EMSDK:$EMSDK/upstream/emscripten:$EMSDK/node/current/bin:$PATH"
 
 # Source emsdk environment in bashrc for interactive use
 RUN echo 'source /usr/local/emsdk/emsdk_env.sh' >> /home/qrl/.bashrc
