@@ -19,7 +19,8 @@ RUN apt-get update && \
         libasound2t64 \
         libgtk-3-0 \
         libgdk-pixbuf2.0-0 && \
-    apt-get -y install cmake swig3.0 python3 python3-dev python3-pip python3-venv libhwloc-dev libboost-dev libffi-dev libssl-dev \
+    # clang-18: LLVM >= 18.1 TSan, which gcc-13's libtsan cannot substitute for
+    apt-get -y install cmake swig3.0 python3 python3-dev python3-pip python3-venv libhwloc-dev libboost-dev libffi-dev libssl-dev clang-18 \
     && rm -rf /var/lib/apt/lists/*
 
 # Get Rust
